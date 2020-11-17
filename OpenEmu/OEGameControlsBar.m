@@ -92,12 +92,12 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
         return;
 
     // Time until hud controls bar fades out
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
-        OEGameControlsBarFadeOutDelayKey : @1.5,
-        OEGameControlsBarShowsAutoSaveStateKey : @NO,
-        OEGameControlsBarShowsQuickSaveStateKey : @NO,
-        OEGameControlsBarShowsAudioOutput : @NO,
-     }];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@ {
+                                      OEGameControlsBarFadeOutDelayKey : @1.5,
+                                      OEGameControlsBarShowsAutoSaveStateKey : @NO,
+                                      OEGameControlsBarShowsQuickSaveStateKey : @NO,
+                                      OEGameControlsBarShowsAudioOutput : @NO,
+                                          }];
 }
 
 - (id)initWithGameViewController:(OEGameViewController *)controller
@@ -118,13 +118,13 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
         OEHUDControlsBarView *barView = [[OEHUDControlsBarView alloc] initWithFrame:NSMakeRect(0, 0, 431 + (hideOptions ? 0 : 50), 45)];
         [[self contentView] addSubview:barView];
         [barView setupControls];
-        
+
         _eventMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskMouseMoved handler:^NSEvent*(NSEvent* e)
-                         {
-                             if([NSApp isActive] && [[self gameWindow] isMainWindow])
-                                 [self performSelectorOnMainThread:@selector(mouseMoved:) withObject:e waitUntilDone:NO];
-                             return e;
-                         }];
+                {
+                    if([NSApp isActive] && [[self gameWindow] isMainWindow])
+                    [self performSelectorOnMainThread:@selector(mouseMoved:) withObject:e waitUntilDone:NO];
+                    return e;
+                }];
         _openMenus = [NSMutableSet set];
         _controlsView = barView;
 
@@ -377,8 +377,8 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
     if([corePlugins count] > 1)
     {
         corePlugins = [corePlugins sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [[obj1 displayName] localizedCaseInsensitiveCompare:[obj2 displayName]];
-        }];
+                        return [[obj1 displayName] localizedCaseInsensitiveCompare:[obj2 displayName]];
+                    }];
 
         for(OECorePlugin *aPlugin in corePlugins)
         {
@@ -505,7 +505,7 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
 
     // Configure shader
     item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Configure Shader…", @"")
-                                      action:@selector(configureShader:)
+                               action:@selector(configureShader:)
                                keyEquivalent:@""];
     [shaderMenu addItem:item];
     [shaderMenu addItem:[NSMenuItem separatorItem]];
@@ -527,10 +527,10 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
 
         [shaderMenu addItem:shaderItem];
     }
-    
+
     if (_sortedCustomShaders.count > 0) {
         [shaderMenu addItem:[NSMenuItem separatorItem]];
-    
+
         for(NSString *shaderName in _sortedCustomShaders)
         {
             NSMenuItem *shaderItem = [[NSMenuItem alloc] initWithTitle:shaderName action:@selector(selectShader:) keyEquivalent:@""];
@@ -585,8 +585,8 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
         [item setSubmenu:audioOutputMenu];
 
         NSPredicate *outputPredicate = [NSPredicate predicateWithBlock:^BOOL(OEAudioDevice *device, NSDictionary *bindings) {
-            return [device numberOfOutputChannels] > 0;
-        }];
+                        return [device numberOfOutputChannels] > 0;
+                    }];
         NSArray *audioOutputDevices = [[[OEAudioDeviceManager sharedAudioDeviceManager] audioDevices] filteredArrayUsingPredicate:outputPredicate];
         if([audioOutputDevices count] == 0) {
             [item setEnabled:NO];
@@ -594,9 +594,9 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
             NSMenuItem *deviceItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"System Default", @"Default audio device setting") action:@selector(changeAudioOutputDevice:) keyEquivalent:@""];
             [deviceItem setRepresentedObject:nil];
             [audioOutputMenu addItem:deviceItem];
-            
+
             [audioOutputMenu addItem:[NSMenuItem separatorItem]];
-            
+
             for(OEAudioDevice *device in audioOutputDevices)
             {
                 deviceItem = [[NSMenuItem alloc] initWithTitle:[device deviceName] action:@selector(changeAudioOutputDevice:) keyEquivalent:@""];
@@ -644,7 +644,7 @@ NSString *const OEGameControlsBarShowsAudioOutput       = @"HUDBarShowAudioOutpu
         if([saveStates count] != 0 || (includeQuickSaveState && useQuickSaveSlots))
         {
             [menu addItem:[NSMenuItem separatorItem]];
-            
+
             NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Load", @"") action:NULL keyEquivalent:@""];
             [item setEnabled:NO];
             [menu addItem:item];

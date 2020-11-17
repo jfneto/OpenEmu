@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2011, OpenEmu Team
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
      * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
      * Neither the name of the OpenEmu Team nor the
        names of its contributors may be used to endorse or promote products
        derived from this software without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY OpenEmu Team ''AS IS'' AND ANY
  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -86,12 +86,12 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     if (!anotherDate) {
         return [self compare:NSDate.distantPast];
     }
-    
+
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    
+
     NSDateComponents *selfDMY = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:self];
     NSDateComponents *anotherDMY = [gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:anotherDate];
-    
+
     if (selfDMY.year != anotherDMY.year) {
         return (selfDMY.year > anotherDMY.year ? NSOrderedDescending : NSOrderedAscending);
     } else if (selfDMY.month != anotherDMY. month) {
@@ -99,7 +99,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     } else if (selfDMY.day != anotherDMY.day) {
         return (selfDMY.day > anotherDMY.day ? NSOrderedDescending : NSOrderedAscending);
     }
-    
+
     return NSOrderedSame;
 }
 
@@ -123,7 +123,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     // Make sure not to reinitialize for subclassed objects
     if(self != [OECollectionViewController class]) return;
 
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@{ OELastGridSizeKey : @1.0f }];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@ { OELastGridSizeKey : @1.0f }];
 }
 
 - (instancetype)init
@@ -139,8 +139,8 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removeObserver:self
-                  forKeyPath:OEDisplayGameTitle
-                     context:OEUserDefaultsDisplayGameTitleKVOContext];
+              forKeyPath:OEDisplayGameTitle
+              context:OEUserDefaultsDisplayGameTitleKVOContext];
 }
 
 #pragma mark - View Lifecycle
@@ -201,26 +201,26 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     // empty collection until -setRepresentedObject: is received again
     if ([self representedObject])
         [self reloadData];
-    
+
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults addObserver:self
-                           forKeyPath:OEDisplayGameTitle
-                              options:0
-                              context:OEUserDefaultsDisplayGameTitleKVOContext];
-    
+                          forKeyPath:OEDisplayGameTitle
+                          options:0
+                          context:OEUserDefaultsDisplayGameTitleKVOContext];
+
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    
+
     // Watch the main thread's managed object context for changes
     NSManagedObjectContext *context = [[OELibraryDatabase defaultDatabase] mainThreadContext];
     [notificationCenter addObserver:self selector:@selector(OE_managedObjectContextDidUpdate:) name:NSManagedObjectContextDidSaveNotification object:context];
-    
+
     [notificationCenter addObserver:self selector:@selector(libraryLocationDidChange:) name:OELibraryLocationDidChangeNotification object:nil];
 }
 
 - (void)viewWillAppear
 {
     [super viewWillAppear];
-    
+
     // Update grid view with current size slider zoom value.
     NSSlider *sizeSlider = [[[self libraryController] toolbar] gridSizeSlider];
     [self zoomGridViewWithValue:[sizeSlider floatValue]];
@@ -259,7 +259,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     [super setRepresentedObject:representedObject];
     [self view];
     [self updateBlankSlate];
-    
+
     [self _doMojaveGridViewHack];
 }
 
@@ -337,13 +337,13 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     NSArray *sortDescriptors = nil;
     BOOL reloadListView = NO;
     switch (tag) {
-        case OEGridViewTag:
-                sortDescriptors = [self defaultSortDescriptors];
-            break;
-        default:
-            sortDescriptors = [listView sortDescriptors];
-            reloadListView = YES;
-            break;
+    case OEGridViewTag:
+        sortDescriptors = [self defaultSortDescriptors];
+        break;
+    default:
+        sortDescriptors = [listView sortDescriptors];
+        reloadListView = YES;
+        break;
     }
 
     [self setSortDescriptors:sortDescriptors];
@@ -356,7 +356,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     if (self.isSelected) {
         [self OE_setupToolbarStatesForViewTag:tag];
     }
-    
+
     if(_selectedViewTag == tag && tag != OEBlankSlateTag)
         return;
 
@@ -369,17 +369,17 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 {
     NSView *view;
     switch (tag) {
-        case OEBlankSlateTag:
-            view = blankSlateView;
-            break;
-        case OEGridViewTag:
-            view = gridViewContainer;
-            break;
-        case OEListViewTag:
-            view = [listView enclosingScrollView];
-            break;
-        default:
-            break;
+    case OEBlankSlateTag:
+        view = blankSlateView;
+        break;
+    case OEGridViewTag:
+        view = gridViewContainer;
+        break;
+    case OEListViewTag:
+        view = [listView enclosingScrollView];
+        break;
+    default:
+        break;
     }
 
     if(!view || [view superview] == [self view]) return;
@@ -408,28 +408,28 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 {
     OELibraryToolbar *toolbar = self.libraryController.toolbar;
     switch (tag) {
-        case OEGridViewTag:
-            toolbar.gridViewButton.state = NSControlStateValueOn;
-            toolbar.listViewButton.state = NSControlStateValueOff;
-            toolbar.gridSizeSlider.enabled = YES;
-            break;
-        case OEListViewTag:
-            toolbar.gridViewButton.state = NSControlStateValueOff;
-            toolbar.listViewButton.state = NSControlStateValueOn;
-            toolbar.gridSizeSlider.enabled = NO;
-            break;
-        case OEBlankSlateTag:
-            toolbar.gridSizeSlider.enabled = NO;
-            toolbar.gridViewButton.enabled = NO;
-            toolbar.listViewButton.enabled = NO;
-            break;
+    case OEGridViewTag:
+        toolbar.gridViewButton.state = NSControlStateValueOn;
+        toolbar.listViewButton.state = NSControlStateValueOff;
+        toolbar.gridSizeSlider.enabled = YES;
+        break;
+    case OEListViewTag:
+        toolbar.gridViewButton.state = NSControlStateValueOff;
+        toolbar.listViewButton.state = NSControlStateValueOn;
+        toolbar.gridSizeSlider.enabled = NO;
+        break;
+    case OEBlankSlateTag:
+        toolbar.gridSizeSlider.enabled = NO;
+        toolbar.gridViewButton.enabled = NO;
+        toolbar.listViewButton.enabled = NO;
+        break;
     }
 }
 
 - (void)updateBlankSlate
 {
     if (!self.shouldShowBlankSlate) {
-        
+
         [self OE_switchToView:self.OE_currentViewTagByToolbarState];
 
         if (self.isSelected) {
@@ -517,7 +517,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     if (![[pboard types] containsObject:NSPasteboardTypeFileURL])
         return NO;
 
-    NSArray<NSURL*> *files = [pboard readObjectsForClasses:@[[NSURL class]] options:@{NSPasteboardURLReadingFileURLsOnlyKey: @YES}];
+    NSArray<NSURL*> *files = [pboard readObjectsForClasses:@[[NSURL class]] options:@ {NSPasteboardURLReadingFileURLsOnlyKey: @YES}];
     OEROMImporter *romImporter = [[[self libraryController] database] importer];
     OEDBCollection *collection = [[self representedObject] isKindOfClass:[OEDBCollection class]] ? (OEDBCollection *)[self representedObject] : nil;
     [romImporter importItemsAtURLs:files intoCollectionWithID:[collection permanentID]];
@@ -598,10 +598,10 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 - (BOOL)toggleQuickLook
 {
     QLPreviewPanel *panel;
-    
+
     if (![self acceptsPreviewPanelControl:nil])
         return NO;
-    
+
     panel = [QLPreviewPanel sharedPreviewPanel];
     if ([panel isVisible])
         [panel orderOut:nil];
@@ -634,7 +634,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 - (void)refreshPreviewPanelIfNeeded
 {
     QLPreviewPanel *panel;
-  
+
     if ([QLPreviewPanel sharedPreviewPanelExists]) {
         panel = [QLPreviewPanel sharedPreviewPanel];
         if ([panel isVisible] && [panel delegate] == self)
@@ -651,14 +651,14 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     NSInteger i = [self imageBrowserViewIndexForPreviewItem:item];
     if (i < 0)
         return NSZeroRect;
-    
+
     IKImageBrowserCell *itemcell = [self.gridView cellForItemAtIndex:i];
     NSRect thumbframe = [itemcell imageFrame];
     NSScrollView *scrollv = [self.gridView enclosingScrollView];
     thumbframe = [self.gridView convertRect:thumbframe toView:scrollv];
     if (!NSContainsRect([scrollv bounds], thumbframe))
         return NSZeroRect;
-    
+
     NSWindow *w = [self.gridView window];
     thumbframe = [scrollv convertRect:thumbframe toView:w.contentView];
     NSRect screenrect = [w convertRectToScreen:thumbframe];
@@ -668,11 +668,11 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 
 - (BOOL)previewPanel:(QLPreviewPanel *)panel handleEvent:(NSEvent *)event
 {
-  if ([event type] == NSEventTypeKeyDown || [event type] == NSEventTypeKeyUp) {
-    [self.gridView.window sendEvent:event];
-    return YES;
-  }
-  return NO;
+    if ([event type] == NSEventTypeKeyDown || [event type] == NSEventTypeKeyUp) {
+        [self.gridView.window sendEvent:event];
+        return YES;
+    }
+    return NO;
 }
 
 
@@ -711,7 +711,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     [self fetchItems];
     [listView noteNumberOfRowsChanged];
     [self setNeedsReloadVisible];
-    
+
     /* Call -updateBlankSlate if:
         - This collection view controller is selected.
         - The blank slate view is the current view tag. This allows switching to a different view tag if an item has been added.
@@ -748,7 +748,7 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
 //    [gamesController rearrangeObjects];
     [_gridView performSelectorOnMainThread:@selector(reloadData) withObject:Nil waitUntilDone:NO];
     [listView reloadDataForRowIndexes:indexSet
-                        columnIndexes:[listView columnIndexesInRect:[listView visibleRect]]];
+              columnIndexes:[listView columnIndexesInRect:[listView visibleRect]]];
 }
 
 - (void)_reloadVisibleData
@@ -761,13 +761,13 @@ static void *OEUserDefaultsDisplayGameTitleKVOContext = &OEUserDefaultsDisplayGa
     [_gridView performSelectorOnMainThread:@selector(reloadData) withObject:Nil waitUntilDone:NO];
     //[_gridView reloadCellsAtIndexes:[_gridView indexesForVisibleCells]];
     [listView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:[listView rowsInRect:[listView visibleRect]]]
-                        columnIndexes:[listView columnIndexesInRect:[listView visibleRect]]];
+              columnIndexes:[listView columnIndexesInRect:[listView visibleRect]]];
 }
 
 - (void)reloadData
 {
     OECoreDataMainThreadAssertion();
-    
+
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(reloadData) object:nil];
 
     [self fetchItems];

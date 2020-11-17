@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2011, OpenEmu Team
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
      * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
      * Neither the name of the OpenEmu Team nor the
        names of its contributors may be used to endorse or promote products
        derived from this software without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY OpenEmu Team ''AS IS'' AND ANY
  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -77,7 +77,7 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
  - Change bounds
  - Start Syphon
  - Native screenshot
- 
+
  Messages from remote layer:
  - Default screen size/aspect size - DONE?
  */
@@ -100,10 +100,10 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
 {
     if([self class] == [OEGameViewController class])
     {
-        [[NSUserDefaults standardUserDefaults] registerDefaults:@{
-                                                                  OEScreenshotFileFormatKey : @(NSBitmapImageFileTypePNG),
-                                                                  OEScreenshotPropertiesKey : @{},
-                                                                  }];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:@ {
+                                      OEScreenshotFileFormatKey : @(NSBitmapImageFileTypePNG),
+                                      OEScreenshotPropertiesKey : @{},
+                                              }];
     }
 }
 
@@ -113,30 +113,32 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
     {
         _controlsWindow = [[OEGameControlsBar alloc] initWithGameViewController:self];
         [_controlsWindow setReleasedWhenClosed:NO];
-        
+
         _controller = [[OEShaderParametersWindowController alloc] initWithGameViewController:self];
-        
-        NSView *view = [[NSView alloc] initWithFrame:(NSRect){ .size = { 1.0, 1.0 }}];
+
+        NSView *view = [[NSView alloc] initWithFrame:(NSRect) {
+                           .size = { 1.0, 1.0 }
+                       }];
         [self setView:view];
-        
+
         _gameView = [[OEGameLayerView alloc] initWithFrame:[[self view] bounds]];
         [_gameView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         [_gameView setDelegate:self];
-        
+
         [[self view] addSubview:_gameView];
-        
+
         _notificationView = [[OEGameLayerNotificationView alloc] initWithFrame:NSMakeRect(0, 0, 28, 28)];
         _notificationView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.view addSubview:_notificationView];
-        
-        NSDictionary<NSString *, id> *views = @{@"notification": _notificationView};
+
+        NSDictionary<NSString *, id> *views = @ {@"notification": _notificationView};
         NSMutableArray<NSLayoutConstraint *> *all = [NSMutableArray new];
         [all addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-60-[notification(28)]" options:0 metrics:nil views:views]];
         [all addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[notification(28)]" options:0 metrics:nil views:views]];
         [NSLayoutConstraint activateConstraints:all];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewDidChangeFrame:) name:NSViewFrameDidChangeNotification object:_gameView];
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidChangeScreen:) name:NSWindowDidMoveNotification object:self];
     }
     return self;
@@ -146,11 +148,11 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
 {
     [_gameView setDelegate:nil];
     _gameView = nil;
-    
+
     [_controlsWindow setGameWindow:nil];
     [_controlsWindow close];
     _controlsWindow = nil;
-    
+
     [_controller.window close];
     _controller = nil;
 }
@@ -160,13 +162,13 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
 - (void)viewDidAppear
 {
     [super viewDidAppear];
-    
+
     NSWindow *window = [self OE_rootWindow];
     if(window == nil) return;
-    
+
     [_controlsWindow setGameWindow:window];
     [_controlsWindow repositionOnGameWindow];
-    
+
     [window makeFirstResponder:_gameView];
 }
 
@@ -258,11 +260,11 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
     OEShaderModel *shader = [OEShadersModel.shared shaderWithName:shaderName];
     if (shader) {
         [[self document] gameViewController:self setShaderURL:shader.url completionHandler:^(BOOL success, NSError *error) {
-            if (success)
-            {
-                [self didLoadShader:shader];
-            }
-            else if (error != nil)
+                            if (success)
+                            {
+                                [self didLoadShader:shader];
+                            }
+                            else if (error != nil)
             {
                 NSAlert *alert = [NSAlert alertWithError:error];
                 [alert runModal];
@@ -288,9 +290,9 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
     {
         _controller.shader = [OEShadersModel.shared shaderForSystem:self.document.systemIdentifier];
     }
-    
+
     [self.document gameViewController:self shaderParamGroupsWithCompletionHandler:^(NSArray<OEShaderParamGroupValue *> *groups) {
-        self->_controller.groups = groups;
+                      self->_controller.groups = groups;
         [self->_controller showWindow:self->_controller];
     }];
 
@@ -306,8 +308,8 @@ NSString *const OEScreenshotPropertiesKey = @"screenshotProperties";
         else
             [menuItem setState:NSControlStateValueOn];
     }
-    
-    
+
+
     return YES;
 }
 

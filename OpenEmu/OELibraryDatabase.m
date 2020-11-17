@@ -116,9 +116,9 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     {
         if(outError != NULL)
         {
-			NSString     *description = NSLocalizedString(@"The OpenEmu Library could not be found.", @"");
-            NSDictionary *dict        = @{ NSLocalizedDescriptionKey : description };
-			
+            NSString     *description = NSLocalizedString(@"The OpenEmu Library could not be found.", @"");
+            NSDictionary *dict        = @ { NSLocalizedDescriptionKey : description };
+
             *outError = [NSError errorWithDomain:@"OELibraryDatabase" code:OELibraryErrorCodeFolderNotFound userInfo:dict];
         }
         return NO;
@@ -126,7 +126,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
 
     defaultDatabase = [[OELibraryDatabase alloc] init];
     defaultDatabase.databaseURL = url;
-    
+
     NSURL *dbFileURL = [url URLByAppendingPathComponent:OEDatabaseFileName];
     BOOL isOldDB = [dbFileURL checkResourceIsReachableAndReturnError:nil];
 
@@ -144,7 +144,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
 
     if(!isOldDB)
         [defaultDatabase OE_createInitialItems];
-    
+
     [[NSUserDefaults standardUserDefaults] setObject:defaultDatabase.databaseURL.path.stringByAbbreviatingWithTildeInPath forKey:OEDatabasePathKey];
     [defaultDatabase OE_setupStateWatcher];
     [defaultDatabase OE_setupAutoImportWatcher];
@@ -154,7 +154,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     defaultDatabase.importer = romImporter;
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^{
+    dispatch_after(popTime, dispatch_get_main_queue(), ^ {
         [defaultDatabase startOpenVGDBSync];
         [romImporter start];
     });
@@ -208,22 +208,24 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     if(mom == nil)
     {
         NSLog(@"%@:%@ No model to generate a store from", [self class], NSStringFromSelector(_cmd));
-        
+
         if(outError != NULL)
         {
-            NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : NSLocalizedString(@"No model to generate a store from.", @"") };
+            NSDictionary *userInfo = @ { NSLocalizedDescriptionKey : NSLocalizedString(@"No model to generate a store from.", @"") };
             *outError = [NSError errorWithDomain:@"OELibraryDatabase" code:OELibraryErrorCodeNoModelToGenerateStoreFrom userInfo:userInfo];
         }
-        
+
         return NO;
     }
 
     NSURL *url = [self.databaseURL URLByAppendingPathComponent:OEDatabaseFileName];
     self.persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
 
-    NSDictionary *options = @{
-        NSMigratePersistentStoresAutomaticallyOption : @NO,
-        NSInferMappingModelAutomaticallyOption       : @NO,
+    NSDictionary *options = @ {
+NSMigratePersistentStoresAutomaticallyOption :
+        @NO,
+NSInferMappingModelAutomaticallyOption       :
+        @NO,
     };
     if([self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:outError] == nil)
     {
@@ -298,7 +300,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
 
         [self OE_removeStateWatcher];
         [defaults removeObjectForKey:OESaveStateLastFSEventIDKey];
-        
+
         [self OE_setupStateWatcher];
         [self.saveStateWatcher callbackBlock](path, kFSEventStreamEventFlagItemIsDir);
     }
@@ -310,9 +312,9 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     {
         // Write changes to disk (in background)
         NSManagedObjectContext *writerContext = self.writerContext;
-        [writerContext performBlock:^{
-            [writerContext save:nil];
-        }];
+        [writerContext performBlock:^ {
+                          [writerContext save:nil];
+                      }];
     }
     else if(note.object == _writerContext)
     {
@@ -320,8 +322,8 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
         if([context.userInfo[OEManagedObjectContextHasDirectChangesKey] boolValue])
         {
             context.userInfo[OEManagedObjectContextHasDirectChangesKey] = @(NO);
-            [_mainThreadMOC performBlock:^{
-                [self->_mainThreadMOC mergeChangesFromContextDidSaveNotification:note];
+            [_mainThreadMOC performBlock:^ {
+                               [self->_mainThreadMOC mergeChangesFromContextDidSaveNotification:note];
                 [self->_mainThreadMOC save:nil];
             }];
         }
@@ -383,7 +385,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
         if(![url checkResourceIsReachableAndReturnError:nil])
             return;
 
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^ {
             [self.importer importItemAtURL:url];
         });
     };
@@ -410,9 +412,9 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     NSString *stateFolderPath = self.stateFolderURL.path;
     __block __unsafe_unretained OEFSBlock recFsBlock;
     __block OEFSBlock fsBlock = [^(NSString *path, FSEventStreamEventFlags flags) {
-        NSManagedObjectContext *context = self.makeChildContext;
-        context.name = @"stateWatcher";
-        if(flags & kFSEventStreamEventFlagItemIsDir)
+                   NSManagedObjectContext *context = self.makeChildContext;
+                   context.name = @"stateWatcher";
+                   if(flags & kFSEventStreamEventFlagItemIsDir)
         {
             NSFileManager *fileManager = [NSFileManager defaultManager];
             NSURL   *url   = [NSURL fileURLWithPath:path];
@@ -423,7 +425,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
                 if([url.pathExtension isEqualTo:OESaveStateSuffix])
                 {
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
-                    dispatch_after(popTime, dispatch_get_main_queue(), ^{
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^ {
                         [OEDBSaveState updateOrCreateStateWithURL:url inContext:context];
                     });
                 }
@@ -451,7 +453,8 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
         }
         [context save:nil];
         [context.parentContext save:nil];
-    } copy];
+    }
+    copy];
 
     recFsBlock = fsBlock;
 
@@ -613,11 +616,11 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
 {
     __block NSArray *result = nil;
     NSManagedObjectContext *context = _mainThreadMOC;
-    [context performBlockAndWait:^{
+    [context performBlockAndWait:^ {
 
-        NSFetchRequest *fetchRequest = [OEDBRom fetchRequest];
-        fetchRequest.fetchLimit = 1;
-        fetchRequest.includesPendingChanges = YES;
+                NSFetchRequest *fetchRequest = [OEDBRom fetchRequest];
+                fetchRequest.fetchLimit = 1;
+                fetchRequest.includesPendingChanges = YES;
 
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"md5 == %@", hashString];
         fetchRequest.predicate = predicate;
@@ -674,19 +677,19 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     NSMutableSet <OEDBSystem *> *systemsSet = [NSMutableSet setWithCapacity:roms.count];
     for(OEDBRom *aRom in roms)
     {
-         [systemsSet addObject:aRom.game.system];
-     }
+        [systemsSet addObject:aRom.game.system];
+    }
 
     NSArray <OEDBSystem *> *systems = systemsSet.allObjects;
     NSMutableDictionary <NSString *, NSArray <OEDBRom *> *> *result = [NSMutableDictionary dictionaryWithCapacity:systems.count];
     for(OEDBSystem *aSystem in systems)
     {
         NSArray <OEDBRom *> *romsForSystem = [roms filteredArrayUsingPredicate:
-                                  [NSPredicate predicateWithBlock:
-                                   ^ BOOL (OEDBRom *aRom, NSDictionary *bindings)
-                                   {
-                                       return aRom.game.system == aSystem;
-                                   }]];
+                                                   [NSPredicate predicateWithBlock:
+                                                    ^ BOOL (OEDBRom *aRom, NSDictionary *bindings)
+             {
+                 return aRom.game.system == aSystem;
+             }]];
         result[aSystem.name] = romsForSystem;
     }
 
@@ -712,7 +715,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     if(metadata[OELibraryRomsFolderURLKey])
     {
         NSString *urlString = metadata[OELibraryRomsFolderURLKey];
-        
+
         if(![urlString containsString:@"file://"])
             result = [NSURL URLWithString:urlString relativeToURL:self.databaseFolderURL];
         else
@@ -724,7 +727,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
         [[NSFileManager defaultManager] createDirectoryAtURL:result withIntermediateDirectories:YES attributes:nil error:nil];
         self.romsFolderURL = result;
     }
-    
+
     return result;
 }
 
@@ -751,9 +754,9 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
         // Also see discussion at http://www.cocoabuilder.com/archive/cocoa/295041-setting-not-saving-nspersistentdocument-metadata-changes-file-modification-date.html
         [self.persistentStoreCoordinator setMetadata:mutableMetaData forPersistentStore:persistentStore];
         [NSPersistentStoreCoordinator setMetadata:mutableMetaData forPersistentStoreOfType:persistentStore.type URL:persistentStore.URL options:nil error:NULL];
-        [_writerContext performBlock:^{
-            [self->_writerContext save:nil];
-        }];
+        [_writerContext performBlock:^ {
+                           [self->_writerContext save:nil];
+                       }];
     }
 }
 
@@ -930,19 +933,19 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
     NSManagedObjectContext *mainContext = [OELibraryDatabase defaultDatabase].mainThreadContext;
 
     __block NSUInteger count = 0;
-    [mainContext performBlockAndWait:^{
-        count = [mainContext countForFetchRequest:request error:nil];
-    }];
+    [mainContext performBlockAndWait:^ {
+                    count = [mainContext countForFetchRequest:request error:nil];
+                }];
 
     while(count != 0)
     {
         __block NSMutableArray *games = nil;
-        [mainContext performBlockAndWait:^{
-            NSArray *gamesObjects = [mainContext executeFetchRequest:request error:nil];
+        [mainContext performBlockAndWait:^ {
+                        NSArray *gamesObjects = [mainContext executeFetchRequest:request error:nil];
             games = [NSMutableArray arrayWithCapacity:gamesObjects.count];
             [gamesObjects enumerateObjectsUsingBlock:^(OEDBGame *game, NSUInteger idx, BOOL *stop) {
-                OEDBRom *rom = game.defaultROM;
-                OEDBSystem *system = game.system;
+                             OEDBRom *rom = game.defaultROM;
+                             OEDBSystem *system = game.system;
 
                 NSDictionary *gameInfo   = [game dictionaryWithValuesForKeys:gameKeys];
                 NSDictionary *romInfo    = [rom dictionaryWithValuesForKeys:romKeys];
@@ -981,7 +984,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
                 }
             }
 
-            NSMutableDictionary *dict = [@{ @"objectID" : objectID, @"status" : @(OEDBGameStatusOK) } mutableCopy];
+            NSMutableDictionary *dict = [@ { @"objectID" : objectID, @"status" : @(OEDBGameStatusOK) } mutableCopy];
 
             if(result != nil)
                 [dict addEntriesFromDictionary:result];
@@ -997,10 +1000,10 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
 
         __block NSMutableArray *previousBoxImages = [NSMutableArray arrayWithCapacity:games.count];
 
-        [mainContext performBlockAndWait:^{
-            for(int i=0; i < games.count; i++)
-            {
-                NSMutableDictionary *gameInfo = games[i];
+        [mainContext performBlockAndWait:^ {
+                        for(int i=0; i < games.count; i++)
+                        {
+                            NSMutableDictionary *gameInfo = games[i];
                 NSManagedObjectID   *objectID = [gameInfo popObjectForKey:@"objectID"];
                 NSDictionary *imageDictionary = [gameInfo popObjectForKey:@"image"];
 
@@ -1031,10 +1034,10 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
             count = [mainContext countForFetchRequest:request error:nil];
         }];
 
-        [mainContext performBlock:^{
-            for(NSManagedObjectID *objID in previousBoxImages)
-            {
-                OEDBImage *item = [OEDBImage objectWithID:objID inContext:mainContext];
+        [mainContext performBlock:^ {
+                        for(NSManagedObjectID *objID in previousBoxImages)
+                        {
+                            OEDBImage *item = [OEDBImage objectWithID:objID inContext:mainContext];
                 [mainContext deleteObject:item];
             }
             [mainContext save:nil];
@@ -1078,7 +1081,7 @@ static OELibraryDatabase * _Nullable defaultDatabase = nil;
         if([ROM respondsToSelector:@selector(dumpWithPrefix:)]) [ROM dumpWithPrefix:subPrefix];
         else NSLog(@"%@ ROM is %@", subPrefix, ROM);
     }
-*/
+    */
     NSLog(@"%@ End of database dump\n\n", prefix);
 }
 

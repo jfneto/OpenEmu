@@ -41,7 +41,7 @@
         DLog(@"UUID is invalid!");
         return nil;
     }
-    
+
     if(rom == nil)
     {
         DLog(@"ROM is invalid!");

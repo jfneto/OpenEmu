@@ -118,19 +118,19 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
     if([pathExtension isEqualToString:@"oeshaderplugin"])
     {
         os_log_info(OE_LOG_IMPORT, "File seems to be a shader plugin at %{public}@", url.path);
-        
+
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSError       *error       = nil;
         NSString      *filename    = url.lastPathComponent.stringByDeletingPathExtension;
         NSString      *shadersPath = [NSString pathWithComponents:@[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).lastObject, @"OpenEmu", @"Shaders"]];
         NSString      *destination = [shadersPath stringByAppendingPathComponent:filename];
-        
+
         if ([OEShadersModel.shared.systemShaderNames containsObject:filename]) {
             // ignore customer shaders with the same name
             os_log_error(OE_LOG_IMPORT, "Custom shader name '%{public}@' collides with system shader", filename);
             return NO;
         }
-        
+
         if ([fileManager fileExistsAtPath:destination]) {
             // lets remove it first
             if (![fileManager removeItemAtPath:destination error:&error])
@@ -139,13 +139,13 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
                 return NO;
             }
         }
-        
+
         if(![fileManager createDirectoryAtURL:[NSURL fileURLWithPath:destination] withIntermediateDirectories:YES attributes:nil error:&error])
         {
             os_log_error(OE_LOG_IMPORT, "Could not create directory '%{public}@' before copying shader: %{public}@", destination, error.localizedDescription);
             return NO;
         }
-        
+
         @try {
             XADArchive *archive = [XADArchive archiveForFile:url.path];
             [archive extractTo:destination];
@@ -154,11 +154,11 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
             os_log_error(OE_LOG_IMPORT, "Error extracting shader plugin: %{public}@", e.reason);
             return NO;
         }
-        
+
         return YES;
     }
     return NO;
-    
+
 }
 
 + (BOOL)OE_isSBIFileAtURL:(NSURL*)url
@@ -373,7 +373,7 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
             if(rom.game.status.intValue == OEDBGameStatusProcessing)
             {
                 OELibraryDatabase *database = self.importer.database;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)),dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)),dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^ {
                     [database startOpenVGDBSync];
                 });
             }
@@ -384,9 +384,9 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
     {
         [context save:nil];
         NSManagedObjectContext *parentContext = context.parentContext;
-        [parentContext performBlock:^{
-            [parentContext save:nil];
-        }];
+        [parentContext performBlock:^ {
+                          [parentContext save:nil];
+                      }];
     }
 
     if(status != OEImportExitErrorResolvable)
@@ -417,7 +417,7 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
 {
     @autoreleasepool {
         [self.importer.context performBlockAndWait:^{
-            if(self.shouldExit) return;
+                                  if(self.shouldExit) return;
 
             [self OE_performImportStepCheckDirectory];
             if(self.shouldExit) return;
@@ -509,14 +509,14 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
         // ignore some formats
         if ([formatName isEqualToString:@"MacBinary"])
             return;
-        
+
         if( [formatName isEqualToString:@"LZMA_Alone"])
             return;
-        
+
         // disable multi-rom archives
         if(archive.numberOfEntries > 1)
             return;
-        
+
         for(int i = 0; i < archive.numberOfEntries; i++)
         {
             if(([archive entryHasSize:i] && [archive sizeOfEntry:i] == 0) || [archive entryIsEncrypted:i] || [archive entryIsDirectory:i] || [archive entryIsArchive:i])
@@ -546,7 +546,7 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
                 @catch (NSException *exception) {
                     NSLog(@"exception handeled");
                 }
-                
+
                 // exception is caught but handler does not execute, so check if extraction worked
                 NSNumber *fileSize = tmpURL.fileSize;
                 if(fileSize.integerValue == 0)
@@ -732,7 +732,7 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
         }
         self.systemIdentifiers = systemIDs;
 
-        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"Aaargh, too many systems. You need to choose one!" };
+        NSDictionary *userInfo = @ { NSLocalizedDescriptionKey : @"Aaargh, too many systems. You need to choose one!" };
         error = [NSError errorWithDomain:OEImportErrorDomainResolvable code:OEImportErrorCodeMultipleSystems userInfo:userInfo];
         [self exitWithStatus:OEImportExitErrorResolvable error:error];
     }
@@ -800,7 +800,7 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
             systemFolder = [systemFolder URLByAppendingPathComponent:baseName isDirectory:YES];
 
             systemFolder = [systemFolder uniqueURLUsingBlock:^NSURL *(NSInteger triesCount) {
-                NSString *newName = [NSString stringWithFormat:@"%@ %ld", baseName, triesCount];
+                             NSString *newName = [NSString stringWithFormat:@"%@ %ld", baseName, triesCount];
                 return [systemFolder.URLByDeletingLastPathComponent URLByAppendingPathComponent:newName isDirectory:YES];
             }];
 
@@ -815,7 +815,7 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
         }
 
         romURL = [romURL uniqueURLUsingBlock:^NSURL *(NSInteger triesCount) {
-            NSString *newName = [NSString stringWithFormat:@"%@ %ld.%@", baseName, triesCount, extension];
+                   NSString *newName = [NSString stringWithFormat:@"%@ %ld.%@", baseName, triesCount, extension];
             return [systemFolder URLByAppendingPathComponent:newName];
         }];
 
@@ -907,13 +907,13 @@ NSString * const OEImportManualSystems = @"OEImportManualSystems";
         }
         else
         {
-            NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : @"No system! Someone must have deleted or disabled it!" };
+            NSDictionary *userInfo = @ { NSLocalizedDescriptionKey : @"No system! Someone must have deleted or disabled it!" };
             error = [NSError errorWithDomain:OEImportErrorDomainFatal code:OEImportErrorCodeNoSystem userInfo:userInfo];
             [self exitWithStatus:OEImportExitErrorFatal error:error];
             return;
         }
     }
-    
+
     if(game != nil)
     {
         rom.game = game;

@@ -35,29 +35,29 @@ static NSString *const OECheatsSettingTableColumnIdentifierEnabled = @"OECheatsS
 static NSString *const OECheatsSettingTableColumnIdentifierDescription = @"OECheatsSettingTableColumnIdentifierDescription";
 static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSettingTableColumnIdentifierType";
 
-@interface _CheatsTextViewWithPlaceHolder: NSTextView
+@interface _CheatsTextViewWithPlaceHolder : NSTextView
 @property (copy) NSString *placeHolderString;
 @end
 
 @implementation _CheatsTextViewWithPlaceHolder
 
 - (BOOL)becomeFirstResponder {
-  [self setNeedsDisplay:YES];
-  return [super becomeFirstResponder];
+    [self setNeedsDisplay:YES];
+    return [super becomeFirstResponder];
 }
 
 - (void)drawRect:(NSRect)rect {
-  [super drawRect:rect];
+    [super drawRect:rect];
     if ([[self string] isEqualToString:@""] && self != [[self window] firstResponder] && _placeHolderString != nil && _placeHolderString.length > 0) {
         NSEdgeInsets edge = NSEdgeInsetsMake(2, 3, 2, 3);
         NSRect resultRect = NSMakeRect(rect.origin.x + edge.left, rect.origin.y + edge.bottom, rect.size.width - edge.left - edge.right, rect.size.height - edge.top - edge.bottom);
-        [[[NSAttributedString alloc] initWithString:_placeHolderString attributes:@{NSForegroundColorAttributeName: [NSColor grayColor]}] drawInRect:resultRect];
+        [[[NSAttributedString alloc] initWithString:_placeHolderString attributes:@ {NSForegroundColorAttributeName: [NSColor grayColor]}] drawInRect:resultRect];
     }
 }
 
 - (BOOL)resignFirstResponder {
-   [self setNeedsDisplay:YES];
-   return [super resignFirstResponder];
+    [self setNeedsDisplay:YES];
+    return [super resignFirstResponder];
 }
 
 @end
@@ -88,27 +88,27 @@ static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSett
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.title = NSLocalizedString(@"Cheat Setting", @"");
-    
+
     _availableTypes = @[@"Unknown"];
-    
+
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.focusRingType = NSFocusRingTypeNone;
-    
+
     _descriptionTextField.delegate = self;
     _codeTextView.delegate = self;
     _notesTextView.delegate = self;
-    
+
     _enabledColumn.identifier = OECheatsSettingTableColumnIdentifierEnabled;
     _descriptionColumn.identifier = OECheatsSettingTableColumnIdentifierDescription;
     _typeColumn.identifier = OECheatsSettingTableColumnIdentifierType;
-    
+
     [_availableTypes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [_typeColumnMenu addItemWithTitle:obj action:nil keyEquivalent:@""];
-    }];
-    
+                        [_typeColumnMenu addItemWithTitle:obj action:nil keyEquivalent:@""];
+                    }];
+
     NSMenu *menu = [[NSMenu alloc] init];
     menu.delegate = self;
     _tableView.menu = menu;
@@ -124,13 +124,13 @@ static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSett
 - (IBAction)addCheat:(id)sender {
     NSManagedObjectContext *context = [[OELibraryDatabase defaultDatabase] mainThreadContext];
     OEDBSaveCheat *cheat = [OEDBSaveCheat createSaveCheatIdentifier:[NSUUID UUID]
-                                                        description:@""
-                                                               type:_availableTypes.firstObject
-                                                               code:@""
-                                                              notes:@""
-                                                            enabled:NO
-                                                             forRom:self.document.rom
-                                                          inContext:context];
+                                          description:@""
+                                          type:_availableTypes.firstObject
+                                          code:@""
+                                          notes:@""
+                                          enabled:NO
+                                          forRom:self.document.rom
+                                          inContext:context];
     [_cheats addObject:cheat];
     [_tableView reloadData];
     [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:_cheats.count - 1] byExtendingSelection:NO];
@@ -167,7 +167,9 @@ static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSett
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    if (row < 0 || row >= _cheats.count) { return nil; }
+    if (row < 0 || row >= _cheats.count) {
+        return nil;
+    }
     NSString *columnIdentifier = tableColumn.identifier;
     OEDBSaveCheat *cheat = _cheats[row];
     if (columnIdentifier == OECheatsSettingTableColumnIdentifierEnabled) {
@@ -182,7 +184,9 @@ static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSett
 }
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-    if (row < 0 || row >= _cheats.count) { return; }
+    if (row < 0 || row >= _cheats.count) {
+        return;
+    }
     NSString *columnIdentifier = tableColumn.identifier;
     OEDBSaveCheat *cheat = _cheats[row];
     if (columnIdentifier == OECheatsSettingTableColumnIdentifierEnabled) {
@@ -234,7 +238,7 @@ static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSett
     _codeTextView.string = cheat.code ?: @"";
     _notesTextView.string = cheat.notes ?: @"";
     _descriptionTextField.stringValue = cheat.codeDescription ?: @"";
-    _descriptionTextField.placeholderAttributedString = [[NSAttributedString alloc] initWithString:enable ? NSLocalizedString(@"Cheat Description", @"") : @"" attributes:@{NSForegroundColorAttributeName: [NSColor grayColor]}];
+    _descriptionTextField.placeholderAttributedString = [[NSAttributedString alloc] initWithString:enable ? NSLocalizedString(@"Cheat Description", @"") : @"" attributes:@ {NSForegroundColorAttributeName: [NSColor grayColor]}];
     _codeTextView.placeHolderString = enable ? NSLocalizedString(@"Cheat code", @"") : @"";
     _notesTextView.placeHolderString = enable ? NSLocalizedString(@"Notes", @"") : @"";
 }
@@ -264,7 +268,7 @@ static NSString *const OECheatsSettingTableColumnIdentifierType = @"OECheatsSett
             cheat.codeDescription = _descriptionTextField.stringValue;
             [cheat save];
             [_tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:_tableView.selectedRow]
-                                  columnIndexes:[NSIndexSet indexSetWithIndex:1]];
+                        columnIndexes:[NSIndexSet indexSetWithIndex:1]];
         }
     }
 }

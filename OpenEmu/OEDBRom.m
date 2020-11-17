@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2020, OpenEmu Team
- 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
      * Redistributions of source code must retain the above copyright
@@ -11,7 +11,7 @@
      * Neither the name of the OpenEmu Team nor the
        names of its contributors may be used to endorse or promote products
        derived from this software without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY OpenEmu Team ''AS IS'' AND ANY
  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -60,11 +60,11 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"location == %@", url.relativeString];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:[self entityName]];
-    
+
     fetchRequest.fetchLimit = 1;
     fetchRequest.includesPendingChanges = YES;
     fetchRequest.predicate = predicate;
-    
+
     return [context executeFetchRequest:fetchRequest error:outError].lastObject;
 }
 
@@ -73,14 +73,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable instancetype)romWithMD5HashString:(nullable NSString *)md5Hash inContext:(NSManagedObjectContext *)context error:(NSError **)outError
 {
     if(md5Hash == nil) return nil;
-    
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"md5 == %@", md5Hash.lowercaseString];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:[self entityName]];
-    
+
     fetchRequest.fetchLimit = 1;
     fetchRequest.includesPendingChanges = YES;
     fetchRequest.predicate = predicate;
-    
+
     return [context executeFetchRequest:fetchRequest error:outError].lastObject;
 }
 
@@ -128,14 +128,14 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSError *error = nil;
     NSURL *url = self.URL;
-    
+
     if(![url checkResourceIsReachableAndReturnError:&error])
     {
         // TODO: mark self as file missing
         DLog(@"%@", error);
         return;
     }
-    
+
     NSString *md5Hash;
     if(![[NSFileManager defaultManager] hashFileAtURL:url md5:&md5Hash error:&error])
     {
@@ -143,7 +143,7 @@ NS_ASSUME_NONNULL_BEGIN
         // TODO: mark self as file missing
         return;
     }
-    
+
     self.md5 = md5Hash.lowercaseString;
 }
 
@@ -152,19 +152,19 @@ NS_ASSUME_NONNULL_BEGIN
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT (name beginswith[c] %@)", @"OESpecialState"];
     NSSet *set = self.saveStates;
     set = [set filteredSetUsingPredicate:predicate];
-    
+
     return set.allObjects;
 }
 
 - (nullable NSArray <OEDBSaveState *> *)normalSaveStatesByTimestampAscending:(BOOL)ascFlag
 {
     return [self.normalSaveStates sortedArrayUsingComparator:
-            ^ NSComparisonResult (OEDBSaveState *obj1, OEDBSaveState *obj2)
-            {
-                NSDate *d1 = obj1.timestamp, *d2 = obj2.timestamp;
-                
-                return ascFlag ? [d2 compare:d1] : [d1 compare:d2];
-            }];
+                                  ^ NSComparisonResult (OEDBSaveState *obj1, OEDBSaveState *obj2)
+                          {
+                              NSDate *d1 = obj1.timestamp, *d2 = obj2.timestamp;
+
+        return ascFlag ? [d2 compare:d1] : [d1 compare:d2];
+    }];
 }
 
 
@@ -183,7 +183,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSArray *)quickSaveStates
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name beginswith[c] %@", OESaveStateQuicksaveName];
-    
+
     return [self.saveStates filteredSetUsingPredicate:predicate].allObjects;
 }
 
@@ -191,14 +191,14 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSString *quickSaveName = [OEDBSaveState nameOfQuickSaveInSlot:num];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name beginswith[c] %@", quickSaveName];
-    
+
     return [self.saveStates filteredSetUsingPredicate:predicate].anyObject;
 }
 
 - (nullable OEDBSaveState *)saveStateWithName:(NSString *)string
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", string];
-    
+
     return [self.saveStates filteredSetUsingPredicate:predicate].anyObject;
 }
 
@@ -206,7 +206,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable OEDBSaveCheat *)saveCheatWithIdentifier:(NSUUID *)identifier
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", identifier];
-    
+
     return [self.saveCheats filteredSetUsingPredicate:predicate].anyObject;
 }
 
@@ -242,7 +242,7 @@ NS_ASSUME_NONNULL_BEGIN
     // calling this very method, so we use -primitiveValueForKey: instead
 
     NSString *key = @"favorite";
-    
+
     [self willAccessValueForKey:key];
     NSNumber *value = [self primitiveValueForKey:key];
     [self didAccessValueForKey:key];
@@ -264,7 +264,7 @@ NS_ASSUME_NONNULL_BEGIN
         if([[[NSFileManager defaultManager] attributesOfItemAtPath:url.path error:nil][NSFileImmutable] boolValue])
         {
             romFileLocked = YES;
-            [[NSFileManager defaultManager] setAttributes:@{ NSFileImmutable: @(FALSE) } ofItemAtPath:url.path error:nil];
+            [[NSFileManager defaultManager] setAttributes:@ { NSFileImmutable: @(FALSE) } ofItemAtPath:url.path error:nil];
         }
 
         NSString *fullName  = url.lastPathComponent;
@@ -279,7 +279,7 @@ NS_ASSUME_NONNULL_BEGIN
             unsortedFolder = [unsortedFolder URLByAppendingPathComponent:baseName isDirectory:YES];
 
             unsortedFolder = [unsortedFolder uniqueURLUsingBlock:^NSURL *(NSInteger triesCount) {
-                NSString *newName = [NSString stringWithFormat:@"%@ %ld", baseName, triesCount];
+                               NSString *newName = [NSString stringWithFormat:@"%@ %ld", baseName, triesCount];
                 return [unsortedFolder.URLByDeletingLastPathComponent URLByAppendingPathComponent:newName isDirectory:YES];
             }];
 
@@ -287,7 +287,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         NSURL *romURL         = [unsortedFolder URLByAppendingPathComponent:fullName];
         romURL = [romURL uniqueURLUsingBlock:^NSURL *(NSInteger triesCount) {
-            NSString *newName = [NSString stringWithFormat:@"%@ %ld.%@", baseName, triesCount, extension];
+                   NSString *newName = [NSString stringWithFormat:@"%@ %ld.%@", baseName, triesCount, extension];
             return [unsortedFolder URLByAppendingPathComponent:newName];
         }];
 
