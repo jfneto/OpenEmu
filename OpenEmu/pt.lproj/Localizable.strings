@@ -44,7 +44,7 @@
 
 "All Games" = "Todos os jogos";
 
-"All Homebrew" = "Todos os Homebrews"; 
+"All Homebrew" = "Todos os Homebrews";
 
 "Are you sure you want to delete %ld save games from your OpenEmu library?" = "Tem certeza que deseja remover %ld jogos salvos de sua biblioteca OpenEmu?";
 
@@ -140,7 +140,7 @@
 
 "Create your personal collection of screenshots. To take a screenshot, you can use the keyboard shortcut ⌘ + T while playing a game." = "Crie sua coleção pessoal de capturas. Para capturar uma tela, você pode utilizar o atalho ⌘ + T enquanto joga um jogo.";
 
-"Default Core" = "Núcleo Padrão"; 
+"Default Core" = "Núcleo Padrão";
 
 "Delete Collection" = "Remover Coleção";
 
@@ -148,9 +148,9 @@
 
 "Delete Games" = "Remover Jogos";
 
-"Delete Save State" = "Remover Salvamento"; 
+"Delete Save State" = "Remover Salvamento";
 
-"Delete Save States" = "Remover Salvamentos"; 
+"Delete Save States" = "Remover Salvamentos";
 
 "Delete Save" = "Remover Salvamento";
 
@@ -162,7 +162,7 @@
 
 "Delete" = "Remover";
 
-"Description" = "Descrição"; 
+"Description" = "Descrição";
 
 "Deselect All" = "Desmarcar Tudo";
 
@@ -174,7 +174,7 @@
 
 "Disc-based games have special requirements. Please read the disc importing guide." = "Jogos baseados em Disco possuem requerimentos especiais. Por favor leia o guia de importação de discos.";
 
-"Dismiss" = "Fechar"; 
+"Dismiss" = "Fechar";
 
 "Do not ask me again" = "Não perguntar mais";
 
@@ -210,11 +210,11 @@
 
 "Error!" = "Erro!";
 
-"Everything" = "Tudo"; 
+"Everything" = "Tudo";
 
-"Featured Games" = "Jogos em Destaque"; 
+"Featured Games" = "Jogos em Destaque";
 
-"Fetching Games…" = "Buscando Jogos…"; 
+"Fetching Games…" = "Buscando Jogos…";
 
 "Filter by:" = "Filtrar por:";
 
@@ -222,7 +222,7 @@
 
 "Game Name" = "Nome do Jogo";
 
-"Game requires download" = "O Jogo precisa ser baixado"; 
+"Game requires download" = "O Jogo precisa ser baixado";
 
 "Game Scanner" = "Scanner de Jogos";
 
@@ -232,7 +232,7 @@
 
 "Hide \"%@\"" = "Esconder \"%@\"";
 
-"Homebrew Games" = "Jogos Homebrew"; 
+"Homebrew Games" = "Jogos Homebrew";
 
 "If there is a red button on the back battery cover, press it.\nIf not, hold down buttons ①+②." = "Se houver um botão vermelho atrás da capa da tampa da bateria, aperte-o.\nSenão, seguro os botões ①+②.";
 
@@ -240,7 +240,7 @@
 
 "In order to emulate some systems, BIOS files are needed due to increasing complexity of the hardware and software of modern gaming consoles. Please read our %@ for more information." = "In order to emulate some systems, BIOS files are needed due to increasing complexity of the hardware and software of modern gaming consoles. Please read our %@ for more information.";
 
-"In order to play the game it must be downloaded." = "Você precisa baixar o jogo para poder jogá-lo."; 
+"In order to play the game it must be downloaded." = "Você precisa baixar o jogo para poder jogá-lo.";
 
 "Insert Cart/Disk/Tape…" = "Inserir Cart/Disk/Tape…";
 
@@ -336,7 +336,7 @@
 
 "Play Save Games" = "Jogar a partir de salvamento";
 
-"Play Save State" = "Jogar Salvamento"; 
+"Play Save State" = "Jogar Salvamento";
 
 "Player %ld" = "Jogador %ld";
 
@@ -448,7 +448,7 @@
 
 "System Default" = "System Default"; // Default audio device setting // TODO
 
-"System Files" = "Arquivos do Sistema"; 
+"System Files" = "Arquivos do Sistema";
 
 "System" = "Sistema";
 
@@ -599,9 +599,9 @@
 
 "Show quicksave states in save state category" = "Exibir salvamentos rápidos em categorias";
 
-"Show game scanner view" = "Exibir visão do scanner de jogos"; 
+"Show game scanner view" = "Exibir visão do scanner de jogos";
 
-"Hide game scanner view" = "Ocultar visão do scanner de jogos"; 
+"Hide game scanner view" = "Ocultar visão do scanner de jogos";
 
 "HUD Bar / Gameplay" = "Barra de Informações / Gameplay";
 
@@ -710,4 +710,3 @@
 "Clear shader cache" = "Clear shader cache";  // TODO
 
 "Reveal user shader folder" = "Reveal user shader folder";  // TODO
-
