@@ -23,45 +23,49 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "OEDBSaveCheat.h"
-#import "OELibraryDatabase.h"
-#import "OEDBRom.h"
-#import "OEDBGame.h"
-#import "OEDBSystem.h"
-#import "OEDBSystem+CoreDataProperties.h"
 #import "OECorePlugin.h"
+#import "OEDBGame.h"
+#import "OEDBRom.h"
+#import "OEDBSystem+CoreDataProperties.h"
+#import "OEDBSystem.h"
+#import "OELibraryDatabase.h"
 
 #import "OpenEmu-Swift.h"
 
 @implementation OEDBSaveCheat
 
-+ (nullable instancetype)createSaveCheatIdentifier:(NSUUID *)identifier description:(NSString *)description type:(NSString *)type code:(NSString *)code notes:(NSString *)notes enabled:(BOOL)enabled forRom:(OEDBRom *)rom inContext:(NSManagedObjectContext *)context
-{
-    if(identifier == nil)
-    {
-        DLog(@"UUID is invalid!");
-        return nil;
-    }
++ (nullable instancetype)createSaveCheatIdentifier:(NSUUID *)identifier
+                                       description:(NSString *)description
+                                              type:(NSString *)type
+                                              code:(NSString *)code
+                                             notes:(NSString *)notes
+                                           enabled:(BOOL)enabled
+                                            forRom:(OEDBRom *)rom
+                                         inContext:
+                                             (NSManagedObjectContext *)context {
+  if (identifier == nil) {
+    DLog(@"UUID is invalid!");
+    return nil;
+  }
 
-    if(rom == nil)
-    {
-        DLog(@"ROM is invalid!");
-        return nil;
-    }
+  if (rom == nil) {
+    DLog(@"ROM is invalid!");
+    return nil;
+  }
 
-    OEDBSaveCheat *saveCheat = [OEDBSaveCheat createObjectInContext:context];
-    saveCheat.identifier = identifier;
-    saveCheat.codeDescription = description;
-    saveCheat.code = code;
-    saveCheat.type = type;
-    saveCheat.enabled = enabled;
-    saveCheat.rom = rom;
-    saveCheat.notes = notes;
-    [saveCheat save];
-    return saveCheat;
+  OEDBSaveCheat *saveCheat = [OEDBSaveCheat createObjectInContext:context];
+  saveCheat.identifier = identifier;
+  saveCheat.codeDescription = description;
+  saveCheat.code = code;
+  saveCheat.type = type;
+  saveCheat.enabled = enabled;
+  saveCheat.rom = rom;
+  saveCheat.notes = notes;
+  [saveCheat save];
+  return saveCheat;
 }
 
-+ (NSString *)entityName
-{
-    return @"SaveCheat";
++ (NSString *)entityName {
+  return @"SaveCheat";
 }
 @end

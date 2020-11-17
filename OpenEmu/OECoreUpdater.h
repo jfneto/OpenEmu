@@ -30,9 +30,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const OECoreUpdaterErrorDomain;
-enum _OECoreUpdaterErrorCode
-{
-    OENoDownloadableCoreForIdentifier = -1,
+enum _OECoreUpdaterErrorCode {
+  OENoDownloadableCoreForIdentifier = -1,
 };
 
 @class OEAlert;
@@ -44,16 +43,27 @@ enum _OECoreUpdaterErrorCode
 
 - (void)checkForUpdates;
 - (void)checkForUpdatesAndInstall;
-- (void)checkForNewCores:(NSNumber *)fromModal NS_SWIFT_NAME(checkForNewCores(fromModal:));
+- (void)checkForNewCores:(NSNumber *)fromModal
+    NS_SWIFT_NAME(checkForNewCores(fromModal:));
 
-- (void)installCoreForGame:(OEDBGame *)game withCompletionHandler:(void(^)(OECorePlugin *plugin, NSError *error))handler;
-- (void)installCoreForSaveState:(OEDBSaveState *)state withCompletionHandler:(void(^)(OECorePlugin *plugin, NSError *error))handler;
-- (void)installCoreWithDownload:(OECoreDownload *)download message:(NSString *)message completionHandler:(void(^)(OECorePlugin *plugin, NSError *error))handler;
-- (void)installCoreWithDownload:(OECoreDownload *)download completionHandler:(void(^)(OECorePlugin *plugin, NSError *error))handler;
+- (void)installCoreForGame:(OEDBGame *)game
+     withCompletionHandler:
+         (void (^)(OECorePlugin *plugin, NSError *error))handler;
+- (void)installCoreForSaveState:(OEDBSaveState *)state
+          withCompletionHandler:
+              (void (^)(OECorePlugin *plugin, NSError *error))handler;
+- (void)installCoreWithDownload:(OECoreDownload *)download
+                        message:(NSString *)message
+              completionHandler:
+                  (void (^)(OECorePlugin *plugin, NSError *error))handler;
+- (void)installCoreWithDownload:(OECoreDownload *)download
+              completionHandler:
+                  (void (^)(OECorePlugin *plugin, NSError *error))handler;
 
 @property(readonly) NSArray<OECoreDownload *> *coreList;
 
-@property(copy, nullable) void(^completionHandler)(OECorePlugin * _Nullable plugin, NSError * _Nullable);
+@property(copy, nullable) void (^completionHandler)
+    (OECorePlugin *_Nullable plugin, NSError *_Nullable);
 @property(nullable) NSString *coreIdentifier;
 @property(nullable) OEAlert *alert;
 @property(nullable) OECoreDownload *coreDownload;

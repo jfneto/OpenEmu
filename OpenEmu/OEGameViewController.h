@@ -27,8 +27,10 @@
 @import Cocoa;
 @import OpenEmuKit;
 
-extern NSNotificationName const OEGameViewControllerEmulationWillFinishNotification;
-extern NSNotificationName const OEGameViewControllerEmulationDidFinishNotification;
+extern NSNotificationName const
+    OEGameViewControllerEmulationWillFinishNotification;
+extern NSNotificationName const
+    OEGameViewControllerEmulationDidFinishNotification;
 extern NSString *const OEGameVolumeKey;
 extern NSString *const OEGameDefaultVideoShaderKey;
 extern NSString *const OEGameSystemVideoShaderKeyFormat;
@@ -43,7 +45,6 @@ extern NSString *const OETakeNativeScreenshots;
 
 extern NSString *const OEScreenshotFileFormatKey;
 extern NSString *const OEScreenshotPropertiesKey;
-
 
 @class OEDBRom;
 @class OEDBGame;
@@ -65,12 +66,22 @@ extern NSString *const OEScreenshotPropertiesKey;
 @protocol OEGameIntegralScalingDelegate;
 
 @protocol OEGameViewControllerDelegate <NSObject>
-- (void)gameViewController:(OEGameViewController *)sender didReceiveMouseEvent:(OEEvent *)event;
-- (void)gameViewController:(OEGameViewController *)sender updateBounds:(CGRect)newBounds;
-- (void)gameViewController:(OEGameViewController *)sender updateBackingScaleFactor:(CGFloat)newScaleFactor;
-- (void)gameViewController:(OEGameViewController *)sender setShaderURL:(NSURL *)url completionHandler:(void (^)(BOOL success, NSError *error))block;
-- (void)gameViewController:(OEGameViewController *)sender shaderParamGroupsWithCompletionHandler:(void (^)(NSArray<OEShaderParamGroupValue *> *))handler;
-- (void)gameViewController:(OEGameViewController *)sender setShaderParameterValue:(CGFloat)value atIndex:(NSUInteger)index atGroupIndex:(NSUInteger)group;
+- (void)gameViewController:(OEGameViewController *)sender
+      didReceiveMouseEvent:(OEEvent *)event;
+- (void)gameViewController:(OEGameViewController *)sender
+              updateBounds:(CGRect)newBounds;
+- (void)gameViewController:(OEGameViewController *)sender
+    updateBackingScaleFactor:(CGFloat)newScaleFactor;
+- (void)gameViewController:(OEGameViewController *)sender
+              setShaderURL:(NSURL *)url
+         completionHandler:(void (^)(BOOL success, NSError *error))block;
+- (void)gameViewController:(OEGameViewController *)sender
+    shaderParamGroupsWithCompletionHandler:
+        (void (^)(NSArray<OEShaderParamGroupValue *> *))handler;
+- (void)gameViewController:(OEGameViewController *)sender
+    setShaderParameterValue:(CGFloat)value
+                    atIndex:(NSUInteger)index
+               atGroupIndex:(NSUInteger)group;
 
 @end
 
@@ -80,7 +91,8 @@ extern NSString *const OEScreenshotPropertiesKey;
 
 @property(strong) OEGameControlsBar *controlsWindow;
 
-@property(unsafe_unretained) id<OEGameIntegralScalingDelegate> integralScalingDelegate;
+@property(unsafe_unretained) id<OEGameIntegralScalingDelegate>
+    integralScalingDelegate;
 
 @property(weak) OEGameDocument *document;
 
@@ -92,12 +104,14 @@ extern NSString *const OEScreenshotPropertiesKey;
 @property(readonly) NSString *coreIdentifier;
 @property(readonly) NSString *systemIdentifier;
 
-- (void)setScreenSize:(OEIntSize)newScreenSize aspectSize:(OEIntSize)newAspectSize;
+- (void)setScreenSize:(OEIntSize)newScreenSize
+           aspectSize:(OEIntSize)newAspectSize;
 
 - (void)reflectVolume:(float)volume;
 - (void)reflectEmulationPaused:(BOOL)paused;
 #pragma mark - HUD Bar Actions
-// switchCore:: expects sender or [sender representedObject] to be an OECorePlugin object and prompts the user for confirmation
+// switchCore:: expects sender or [sender representedObject] to be an
+// OECorePlugin object and prompts the user for confirmation
 - (void)selectShader:(id)sender;
 - (void)configureShader:(id)sender;
 - (void)toggleControlsVisibility:(id)sender;
@@ -109,11 +123,11 @@ extern NSString *const OEScreenshotPropertiesKey;
 #pragma mark - Info
 @property(readonly) NSSize defaultScreenSize;
 
-@property (readonly) OEIntSize aspectSize;
-@property (readonly) OEIntSize screenSize;
-@property (nonatomic) NSUInteger discCount;
-@property (nonatomic) NSArray <NSDictionary <NSString *, id> *> *displayModes;
-@property (nonatomic) NSUInteger remoteContextID;
+@property(readonly) OEIntSize aspectSize;
+@property(readonly) OEIntSize screenSize;
+@property(nonatomic) NSUInteger discCount;
+@property(nonatomic) NSArray<NSDictionary<NSString *, id> *> *displayModes;
+@property(nonatomic) NSUInteger remoteContextID;
 
 @end
 

@@ -34,10 +34,11 @@
 @class OELibraryToolbar;
 @class OEDBGame;
 
-extern NSString * const OELibraryStatesKey;
-extern NSString * const OELibraryLastCategoryKey;
+extern NSString *const OELibraryStatesKey;
+extern NSString *const OELibraryLastCategoryKey;
 
-@protocol OELibraryControllerDelegate, OELibrarySubviewController;
+@protocol OELibraryControllerDelegate
+, OELibrarySubviewController;
 @interface OELibraryController : NSViewController
 
 @property(unsafe_unretained) id<OELibraryControllerDelegate> delegate;
@@ -59,7 +60,7 @@ extern NSString * const OELibraryLastCategoryKey;
 #pragma mark - Menu Item Actions
 - (IBAction)editSmartCollection:(id)sender;
 - (IBAction)addToLibrary:(id)sender;
-- (void)startGame:(OEDBGame*)game;
+- (void)startGame:(OEDBGame *)game;
 - (IBAction)startSelectedGame:(id)sender;
 - (IBAction)startSaveState:(id)sender;
 
@@ -70,15 +71,19 @@ extern NSString * const OELibraryLastCategoryKey;
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
 #pragma mark - Properties
-@property (strong) OELibraryDatabase *database;
-@property (nonatomic, readonly) NSViewController <OELibrarySubviewController> *currentSubviewController;
-@property (strong) IBOutlet OELibraryToolbar *toolbar;
+@property(strong) OELibraryDatabase *database;
+@property(nonatomic, readonly)
+    NSViewController<OELibrarySubviewController> *currentSubviewController;
+@property(strong) IBOutlet OELibraryToolbar *toolbar;
 @end
 
 @class OEDBGame, OEDBRom, OEDBSaveState, OEDBSaveCheat;
 @protocol OELibraryControllerDelegate <NSObject>
 @optional
-- (void)libraryController:(OELibraryController *)sender didSelectGame:(OEDBGame *)aGame;
-- (void)libraryController:(OELibraryController *)sender didSelectRom:(OEDBRom *)aGame;
-- (void)libraryController:(OELibraryController *)sender didSelectSaveState:(OEDBSaveState *)aSaveState;
+- (void)libraryController:(OELibraryController *)sender
+            didSelectGame:(OEDBGame *)aGame;
+- (void)libraryController:(OELibraryController *)sender
+             didSelectRom:(OEDBRom *)aGame;
+- (void)libraryController:(OELibraryController *)sender
+       didSelectSaveState:(OEDBSaveState *)aSaveState;
 @end

@@ -34,12 +34,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(int16_t, OEDBGameStatus)
-{
-    OEDBGameStatusOK,
-    OEDBGameStatusDownloading,
-    OEDBGameStatusAlert,
-    OEDBGameStatusProcessing,
+typedef NS_ENUM(int16_t, OEDBGameStatus) {
+  OEDBGameStatusOK,
+  OEDBGameStatusDownloading,
+  OEDBGameStatusAlert,
+  OEDBGameStatusProcessing,
 };
 
 extern NSString *const OEPasteboardTypeGame;
@@ -51,13 +50,18 @@ extern NSString *const OEGameArtworkPropertiesKey;
 
 #pragma mark - Creating and Obtaining OEDBGames
 
-+ (instancetype)createGameWithName:(NSString *)name andSystem:(OEDBSystem *)system inDatabase:(OELibraryDatabase *)database;
++ (instancetype)createGameWithName:(NSString *)name
+                         andSystem:(OEDBSystem *)system
+                        inDatabase:(OELibraryDatabase *)database;
 
 // returns the game from the default database that represents the file at url
-+ (instancetype)gameWithURL:(nullable NSURL *)gameURL error:(NSError **)outError;
++ (instancetype)gameWithURL:(nullable NSURL *)gameURL
+                      error:(NSError **)outError;
 
 // returns the game from the specified database that represents the file at url
-+ (instancetype _Nullable)gameWithURL:(nullable NSURL *)gameURL inDatabase:(OELibraryDatabase *)database error:(NSError **)outError;
++ (instancetype _Nullable)gameWithURL:(nullable NSURL *)gameURL
+                           inDatabase:(OELibraryDatabase *)database
+                                error:(NSError **)outError;
 
 #pragma mark - Cover Art Database Sync
 
@@ -72,12 +76,12 @@ extern NSString *const OEGameArtworkPropertiesKey;
 
 #pragma mark - Accessors
 
-@property(readonly) OEDBRom       *defaultROM;
-@property(readonly) NSDate        *lastPlayed;
+@property(readonly) OEDBRom *defaultROM;
+@property(readonly) NSDate *lastPlayed;
 @property(readonly) OEDBSaveState *autosaveForLastPlayedRom;
-@property(readonly) NSNumber      *saveStateCount;
-@property(readonly) NSNumber      *playCount;
-@property(readonly) NSNumber      *playTime;
+@property(readonly) NSNumber *saveStateCount;
+@property(readonly) NSNumber *playCount;
+@property(readonly) NSNumber *playTime;
 
 @property(readonly) BOOL filesAvailable;
 
@@ -86,24 +90,29 @@ extern NSString *const OEGameArtworkPropertiesKey;
 - (void)setBoxImageByImage:(NSImage *)image;
 - (void)setBoxImageByURL:(NSURL *)imageURL;
 
-- (void)deleteByMovingFile:(BOOL)moveToTrash keepSaveStates:(BOOL)keepSaveStates;
+- (void)deleteByMovingFile:(BOOL)moveToTrash
+            keepSaveStates:(BOOL)keepSaveStates;
 
 #pragma mark - Core Data utilities
 
 + (NSString *)entityName;
-+ (NSEntityDescription *)entityDescriptionInContext:(NSManagedObjectContext *)context;
++ (NSEntityDescription *)entityDescriptionInContext:
+    (NSManagedObjectContext *)context;
 
 #pragma mark - Data Model Properties
 
-@property(nonatomic, retain, nullable)   NSString *displayName;
+@property(nonatomic, retain, nullable) NSString *displayName;
 @property(nonatomic, readonly, nullable) NSString *cleanDisplayName;
 
 #pragma mark - Data Model Relationships
 
-@property(nonatomic, readonly, nullable) NSMutableSet <OEDBRom *>         *mutableRoms;
-@property(nonatomic, readonly, nullable) NSMutableSet <NSManagedObject *> *mutableGenres;
-@property(nonatomic, readonly, nullable) NSMutableSet <OEDBCollection *>  *mutableCollections;
-@property(nonatomic, readonly, nullable) NSMutableSet <NSManagedObject *> *mutableCredits;
+@property(nonatomic, readonly, nullable) NSMutableSet<OEDBRom *> *mutableRoms;
+@property(nonatomic, readonly, nullable)
+    NSMutableSet<NSManagedObject *> *mutableGenres;
+@property(nonatomic, readonly, nullable)
+    NSMutableSet<OEDBCollection *> *mutableCollections;
+@property(nonatomic, readonly, nullable)
+    NSMutableSet<NSManagedObject *> *mutableCredits;
 @end
 
 NS_ASSUME_NONNULL_END

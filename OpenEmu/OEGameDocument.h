@@ -27,20 +27,19 @@
 @import Cocoa;
 #import "OEGameViewController.h"
 
-extern NSString * const OEScreenshotAspectRatioCorrectionDisabled;
+extern NSString *const OEScreenshotAspectRatioCorrectionDisabled;
 
 extern NSString *const OEGameCoreManagerModePreferenceKey;
 extern NSString *const OEGameDocumentErrorDomain;
 
-enum _OEGameDocumentErrorCodes
-{
-    OENoError                      =  0,
-    OEFileDoesNotExistError        = -1,
-    OENoCoreError                  = -2,
-    OENoCoreForSystemError         = -7,
-    OENoCoreForSaveStateError      = -8,
-    OEImportRequiredError          = -9,
-    OECouldNotLoadROMError         = -10,
+enum _OEGameDocumentErrorCodes {
+  OENoError = 0,
+  OEFileDoesNotExistError = -1,
+  OENoCoreError = -2,
+  OENoCoreForSystemError = -7,
+  OENoCoreForSaveStateError = -8,
+  OEImportRequiredError = -9,
+  OECouldNotLoadROMError = -10,
 };
 
 @class OECorePlugin;
@@ -54,15 +53,20 @@ enum _OEGameDocumentErrorCodes
 
 @interface OEGameDocument : NSDocument <OEGameViewControllerDelegate>
 
-- (id)initWithRom:(OEDBRom *)rom core:(OECorePlugin *)core error:(NSError **)outError;
-- (id)initWithGame:(OEDBGame *)game core:(OECorePlugin *)core error:(NSError **)outError;
+- (id)initWithRom:(OEDBRom *)rom
+             core:(OECorePlugin *)core
+            error:(NSError **)outError;
+- (id)initWithGame:(OEDBGame *)game
+              core:(OECorePlugin *)core
+             error:(NSError **)outError;
 - (id)initWithSaveState:(OEDBSaveState *)state error:(NSError **)outError;
 
-- (void)setupGameWithCompletionHandler:(void(^)(BOOL success, NSError *error))handler;
+- (void)setupGameWithCompletionHandler:(void (^)(BOOL success,
+                                                 NSError *error))handler;
 - (void)showInSeparateWindowInFullScreen:(BOOL)fullScreen;
 
 @property(readonly) OEDBRom *rom;
-@property(readonly) NSURL   *romFileURL;
+@property(readonly) NSURL *romFileURL;
 @property(readonly) OECorePlugin *corePlugin;
 @property(readonly) OESystemPlugin *systemPlugin;
 
@@ -82,7 +86,7 @@ enum _OEGameDocumentErrorCodes
 - (IBAction)editControls:(id)sender;
 
 #pragma mark - Volume
-@property (readonly) float volume;
+@property(readonly) float volume;
 - (IBAction)changeAudioOutputDevice:(id)sender;
 - (IBAction)changeVolume:(id)sender;
 - (IBAction)mute:(id)sender;
@@ -103,7 +107,9 @@ enum _OEGameDocumentErrorCodes
 #pragma mark - Cheats
 - (BOOL)supportsCheats;
 - (void)openCheatSettingController;
-- (void)setCheat:(NSString *)cheatCode withType:(NSString *)type enabled:(BOOL)enabled;
+- (void)setCheat:(NSString *)cheatCode
+        withType:(NSString *)type
+         enabled:(BOOL)enabled;
 
 #pragma mark - Discs
 - (IBAction)setDisc:(id)sender;
@@ -132,10 +138,19 @@ enum _OEGameDocumentErrorCodes
 
 #pragma mark - OEGameViewController Methods
 - (void)setOutputBounds:(NSRect)bounds;
-- (void)gameViewController:(OEGameViewController *)sender didReceiveMouseEvent:(OEEvent *)event;
-- (void)gameViewController:(OEGameViewController *)sender updateBounds:(CGRect)newBounds;
-- (void)gameViewController:(OEGameViewController *)sender setShaderURL:(NSURL *)url completionHandler:(void (^)(BOOL success, NSError *error))block;
-- (void)gameViewController:(OEGameViewController *)sender shaderParamGroupsWithCompletionHandler:(void (^)(NSArray<OEShaderParamGroupValue *> *))handler;
-- (void)gameViewController:(OEGameViewController *)sender setShaderParameterValue:(CGFloat)value atIndex:(NSUInteger)index atGroupIndex:(NSUInteger)group;
+- (void)gameViewController:(OEGameViewController *)sender
+      didReceiveMouseEvent:(OEEvent *)event;
+- (void)gameViewController:(OEGameViewController *)sender
+              updateBounds:(CGRect)newBounds;
+- (void)gameViewController:(OEGameViewController *)sender
+              setShaderURL:(NSURL *)url
+         completionHandler:(void (^)(BOOL success, NSError *error))block;
+- (void)gameViewController:(OEGameViewController *)sender
+    shaderParamGroupsWithCompletionHandler:
+        (void (^)(NSArray<OEShaderParamGroupValue *> *))handler;
+- (void)gameViewController:(OEGameViewController *)sender
+    setShaderParameterValue:(CGFloat)value
+                    atIndex:(NSUInteger)index
+               atGroupIndex:(NSUInteger)group;
 
 @end

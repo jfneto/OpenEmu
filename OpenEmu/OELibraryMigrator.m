@@ -25,10 +25,10 @@
  */
 
 #import "OELibraryMigrator.h"
-#import "OEMigrationWindowController.h"
-#import "OELibraryDatabase.h"
-#import "OEDBScreenshot.h"
 #import "ALIterativeMigrator.h"
+#import "OEDBScreenshot.h"
+#import "OELibraryDatabase.h"
+#import "OEMigrationWindowController.h"
 
 #import "OpenEmu-Swift.h"
 
@@ -42,53 +42,58 @@ NSString *const OEMigrationErrorDomain = @"OEMigrationErrorDomain";
 
 @implementation OELibraryMigrator
 
-- (id)initWithStoreURL:(NSURL *)url
-{
-    self = [super init];
-    if (self) {
-        NSURL *storeURL = [url URLByAppendingPathComponent:OEDatabaseFileName];
-        _storeURL = storeURL;
-    }
-    return self;
+- (id)initWithStoreURL:(NSURL *)url {
+  self = [super init];
+  if (self) {
+    NSURL *storeURL = [url URLByAppendingPathComponent:OEDatabaseFileName];
+    _storeURL = storeURL;
+  }
+  return self;
 }
 
 #pragma mark -
 
-- (BOOL)runMigration:(NSError **)outError
-{
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"OEDatabase" withExtension:@"momd"];
-    NSManagedObjectModel *destinationModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+- (BOOL)runMigration:(NSError **)outError {
+  NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"OEDatabase"
+                                            withExtension:@"momd"];
+  NSManagedObjectModel *destinationModel =
+      [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
 
-    NSArray* modelNames = @[@"OEDatabase",
-                            @"OEDatabase 0.2",
-                            @"OEDatabase 0.3",
-                            @"OEDatabase 0.4",
-                            @"OEDatabase 0.5",
-                            @"OEDatabase 1.0",
-                            @"OEDatabase 1.1",
-                            @"OEDatabase 1.2",
-                            @"OEDatabase 1.3",
-                            @"OEDatabase 1.4"];
-    if (![ALIterativeMigrator iterativeMigrateURL:_storeURL ofType:NSSQLiteStoreType toModel:destinationModel orderedModelNames:modelNames error:outError])
-    {
-        if(outError)
-            DLog(@"Error migrating to latest model: %@\n %@", *outError, [*outError userInfo]);
+  NSArray *modelNames = @[
+    @"OEDatabase", @"OEDatabase 0.2", @"OEDatabase 0.3", @"OEDatabase 0.4",
+    @"OEDatabase 0.5", @"OEDatabase 1.0", @"OEDatabase 1.1", @"OEDatabase 1.2",
+    @"OEDatabase 1.3", @"OEDatabase 1.4"
+  ];
+  if (![ALIterativeMigrator iterativeMigrateURL:_storeURL
+                                         ofType:NSSQLiteStoreType
+                                        toModel:destinationModel
+                              orderedModelNames:modelNames
+                                          error:outError]) {
+    if (outError)
+      DLog(@"Error migrating to latest model: %@\n %@", *outError,
+           [*outError userInfo]);
 
-        return NO;
-    }
+    return NO;
+  }
 
-    NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType URL:_storeURL options:nil error:outError];
-    NSArray *versions = sourceMetadata[NSStoreModelVersionIdentifiersKey];
-    versions = [versions sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+  NSDictionary *sourceMetadata = [NSPersistentStoreCoordinator
+      metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                   URL:_storeURL
+                               options:nil
+                                 error:outError];
+  NSArray *versions = sourceMetadata[NSStoreModelVersionIdentifiersKey];
+  versions =
+      [versions sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 
-    NSString *sourceVersion = versions.lastObject;
-    if([sourceVersion compare:@"1.4"] == NSOrderedAscending)
-    {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:OEDBScreenshotImportRequired];
-    }
+  NSString *sourceVersion = versions.lastObject;
+  if ([sourceVersion compare:@"1.4"] == NSOrderedAscending) {
+    [[NSUserDefaults standardUserDefaults]
+        setBool:YES
+         forKey:OEDBScreenshotImportRequired];
+  }
 
-    DLog(@"Migration Done");
-    return YES;
+  DLog(@"Migration Done");
+  return YES;
 }
 
 @end

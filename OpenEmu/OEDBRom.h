@@ -39,12 +39,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Creating and Obtaining OEDBRoms
 
-+ (nullable instancetype)romWithURL:(nullable NSURL *)romURL inContext:(NSManagedObjectContext *)context error:(NSError **)outError;
-+ (nullable instancetype)romWithMD5HashString:(nullable NSString *)romMD5HashString inContext:(NSManagedObjectContext *)context error:(NSError **)outError;
++ (nullable instancetype)romWithURL:(nullable NSURL *)romURL
+                          inContext:(NSManagedObjectContext *)context
+                              error:(NSError **)outError;
++ (nullable instancetype)romWithMD5HashString:
+                             (nullable NSString *)romMD5HashString
+                                    inContext:(NSManagedObjectContext *)context
+                                        error:(NSError **)outError;
 
 #pragma mark - Accessors
 
-// returns md5 hash for rom. calculates it if necessary so the method can take a long time to return, and might return nil if hash is not in db and can not be calculated
+// returns md5 hash for rom. calculates it if necessary so the method can take a
+// long time to return, and might return nil if hash is not in db and can not be
+// calculated
 @property(readonly, nullable) NSString *md5Hash;
 // returns md5 hash for rom if one was calculated before
 @property(readonly, nullable) NSString *md5HashIfAvailable;
@@ -53,11 +60,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(readonly) NSInteger saveStateCount;
 
 // returns save states ordered by timestamp
-- (nullable NSArray <OEDBSaveState *> *)normalSaveStatesByTimestampAscending:(BOOL)sortByTimestampAscending;
-- (nullable NSArray <OEDBSaveState *> *)normalSaveStates;
+- (nullable NSArray<OEDBSaveState *> *)normalSaveStatesByTimestampAscending:
+    (BOOL)sortByTimestampAscending;
+- (nullable NSArray<OEDBSaveState *> *)normalSaveStates;
 
 - (nullable OEDBSaveState *)autosaveState;
-- (nullable NSArray <OEDBSaveState *> *)quickSaveStates;
+- (nullable NSArray<OEDBSaveState *> *)quickSaveStates;
 
 - (nullable OEDBSaveState *)quickSaveStateInSlot:(NSInteger)num;
 - (nullable OEDBSaveState *)saveStateWithName:(NSString *)string;
@@ -87,12 +95,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)deleteByMovingFile:(BOOL)moveToTrash keepSaveStates:(BOOL)statesFlag;
 
 + (NSString *)entityName;
-+ (NSEntityDescription *)entityDescriptionInContext:(NSManagedObjectContext *)context;
++ (NSEntityDescription *)entityDescriptionInContext:
+    (NSManagedObjectContext *)context;
 
 #pragma mark - Data Model Relationships
 
-@property(nonatomic, readonly, nullable) NSMutableSet    *mutableSaveStates;
-@property(nonatomic, retain)   NSManagedObject *tosec;
+@property(nonatomic, readonly, nullable) NSMutableSet *mutableSaveStates;
+@property(nonatomic, retain) NSManagedObject *tosec;
 @end
 
 NS_ASSUME_NONNULL_END

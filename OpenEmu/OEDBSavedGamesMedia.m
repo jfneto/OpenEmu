@@ -25,94 +25,89 @@
  */
 
 #import "OEDBSavedGamesMedia.h"
-#import "OETheme.h"
-#import "OEDBSaveState.h"
 #import "OEDBSaveCheat.h"
+#import "OEDBSaveState.h"
+#import "OETheme.h"
 NS_ASSUME_NONNULL_BEGIN
 
-NSString * const OEDBSavedGamesMediaShowsAutoSaves = @"OEDBSavedGamesMediaShowsAutoSaves";
-NSString * const OEDBSavedGamesMediaShowsQuickSaves = @"OEDBSavedGamesMediaShowsQuickSaves";
+NSString *const OEDBSavedGamesMediaShowsAutoSaves =
+    @"OEDBSavedGamesMediaShowsAutoSaves";
+NSString *const OEDBSavedGamesMediaShowsQuickSaves =
+    @"OEDBSavedGamesMediaShowsQuickSaves";
 
 @implementation OEDBSavedGamesMedia
 
-+ (instancetype)sharedDBSavedGamesMedia
-{
-    static OEDBSavedGamesMedia *sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^ {
-        sharedInstance = [OEDBSavedGamesMedia new];
-    });
-    return sharedInstance;
++ (instancetype)sharedDBSavedGamesMedia {
+  static OEDBSavedGamesMedia *sharedInstance;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    sharedInstance = [OEDBSavedGamesMedia new];
+  });
+  return sharedInstance;
 }
 
 #pragma mark - OESidebarItem
 
-- (nullable NSImage *)sidebarIcon
-{
-    return [[OETheme sharedTheme] imageForKey:@"media_saved_games" forState:OEThemeStateDefault];
+- (nullable NSImage *)sidebarIcon {
+  return [[OETheme sharedTheme] imageForKey:@"media_saved_games"
+                                   forState:OEThemeStateDefault];
 }
 
-- (NSString *)sidebarName
-{
-    return NSLocalizedString(@"Saved Games", @"");
+- (NSString *)sidebarName {
+  return NSLocalizedString(@"Saved Games", @"");
 }
 
-- (void)setSidebarName:(NSString *)newName
-{
-    NSLog(@"OEDBSavedGamesMedia: can not change name!");
+- (void)setSidebarName:(NSString *)newName {
+  NSLog(@"OEDBSavedGamesMedia: can not change name!");
 }
 
-- (nullable NSString*)viewControllerClassName
-{
-    return @"OEMediaViewController";
+- (nullable NSString *)viewControllerClassName {
+  return @"OEMediaViewController";
 }
 
-- (nullable NSString*)sidebarID
-{
-    return @"savedGames";
+- (nullable NSString *)sidebarID {
+  return @"savedGames";
 }
 
-- (BOOL)isSelectableInSidebar
-{
-    return YES;
+- (BOOL)isSelectableInSidebar {
+  return YES;
 }
 
-- (BOOL)isEditableInSidebar
-{
-    return NO;
+- (BOOL)isEditableInSidebar {
+  return NO;
 }
 
-- (BOOL)isGroupHeaderInSidebar
-{
-    return NO;
+- (BOOL)isGroupHeaderInSidebar {
+  return NO;
 }
 
-- (BOOL)hasSubCollections
-{
-    return NO;
+- (BOOL)hasSubCollections {
+  return NO;
 }
 
 #pragma mark - OECollectionViewItemProtocol
 
-- (BOOL)isCollectionEditable
-{
-    return NO;
+- (BOOL)isCollectionEditable {
+  return NO;
 }
 
-- (NSPredicate *)baseFilterPredicate
-{
-    NSMutableArray <NSPredicate *> *subpredicates = [NSMutableArray array];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+- (NSPredicate *)baseFilterPredicate {
+  NSMutableArray<NSPredicate *> *subpredicates = [NSMutableArray array];
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
-    if(![defaults boolForKey:OEDBSavedGamesMediaShowsAutoSaves]) {
-        [subpredicates addObject:[NSPredicate predicateWithFormat:@"name != %@", OESaveStateAutosaveName]];
-    }
+  if (![defaults boolForKey:OEDBSavedGamesMediaShowsAutoSaves]) {
+    [subpredicates
+        addObject:[NSPredicate predicateWithFormat:@"name != %@",
+                                                   OESaveStateAutosaveName]];
+  }
 
-    if(![defaults boolForKey:OEDBSavedGamesMediaShowsQuickSaves]) {
-        [subpredicates addObject:[NSPredicate predicateWithFormat:@"NOT(name BEGINSWITH %@)", OESaveStateQuicksaveName]];
-    }
+  if (![defaults boolForKey:OEDBSavedGamesMediaShowsQuickSaves]) {
+    [subpredicates
+        addObject:[NSPredicate predicateWithFormat:@"NOT(name BEGINSWITH %@)",
+                                                   OESaveStateQuicksaveName]];
+  }
 
-    return [NSCompoundPredicate andPredicateWithSubpredicates:subpredicates];
+  return [NSCompoundPredicate andPredicateWithSubpredicates:subpredicates];
 }
 @end
 
